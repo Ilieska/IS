@@ -1,0 +1,75 @@
+﻿@model List<Cinema.Domain.DomainModels.Ticket>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>All Tickets</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New Ticket</a>
+</p>
+
+<div class="container">
+    <div class="d-flex flex-row flex-wrap justify-content-evenly align-content-stretch align-content-center">
+        <input class="form-control font-weight-bold m-5 border border-success" id="search" type="text" placeholder="Search here...">
+    </div>
+
+        <div id="tickets" class="d-flex flex-row flex-wrap justify-content-between align-content-stretch align-content-center">
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var item = Model[i];
+
+            <div class="card mb-3 p-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-5">
+                        <img src="@item.MoviePoster" class="img-fluid rounded-start" alt="movie-poster" style="width:100%">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">@item.MovieName</h4>
+                            <h5 class="card-subtitle">Director: <span class="font-weight-normal">@item.MovieDirector</span></h5>
+                            <h6 class="card-text">Movie Length: <span class="font-weight-normal">@item.MovieLength</span></h6>
+                            <h6 class="card-text">Movie Genre: <span class="font-weight-normal">@item.MovieGenre</span></h6>
+                            <hr />
+                            <h6 class="card-text p-0">Cinema Hall: <span class="font-weight-normal">@item.CinemaHall</span></h6>
+                            <h6 class="card-text p-0">Projection Date&Time: <span class="font-weight-normal">@item.ProjectionDateTime</span></h6>
+                            <br />
+                            <h5 class="card-subtitle text-center">Ticket Price: $<span>@item.TicketPrice</span></h5>
+                            <br />
+                            <div class="text-center">
+                                <a asp-action="AddTicketToCart" asp-route-id="@item.Id" class="btn btn-success btn-lg">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-0">
+                        <div class="col-md-4"><a class="btn btn-outline-secondary" style="display:block" asp-action="Details" asp-route-id="@item.Id">Details</a></div>
+                        <div class="col-md-4"><a class="btn btn-secondary" style="display:block" asp-action="Edit" asp-route-id="@item.Id">Edit</a></div>
+                        <div class="col-md-4"><a class="btn btn-danger" style="display:block" asp-action="Delete" asp-route-id="@item.Id">Delete</a></div>
+                    </div>
+
+                </div>
+            }
+        </div>
+</div>
+
+
+    @section scripts{
+
+        <script>
+
+            $(document).ready(function () {
+                $("#search").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#tickets .card").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+
+        </script>
+
+    }
